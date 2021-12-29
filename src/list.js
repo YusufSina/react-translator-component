@@ -1,21 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
-import Session from 'react-session-api';
 import Config from './config';
 import { Dropdown, List } from './ui/index';
+import { context } from './context';
 
 const SelectList = ({ Theme, onChange }) => {
-  const [currentLanguage] = useState(Config.default);
-
-  const onLanguageChange = data => {
-    if (data && data.language) {
-      onChange(data.language);
-    }
-  };
-
+  const { currentLanguage } = useContext(context);
   useEffect(() => {
-    Session.onSet(onLanguageChange);
-  }, []);
+    onChange(currentLanguage);
+  }, [currentLanguage]);
 
   const returnElement = {
     dropdown: (

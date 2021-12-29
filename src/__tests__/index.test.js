@@ -1,7 +1,7 @@
 /* eslint-disable global-require */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Translator, T, TF, LanguageList, Config } from '../index';
+import { Translator, T, LanguageList, Config } from '../index';
 
 it('renders without crashing: null config, theme dropdown', () => {
   const div = document.createElement('div');
@@ -64,7 +64,6 @@ it('renders without crashing: test config, translate sample', () => {
       <p>{T('there are only slaves.')}</p>
       <p>{T('When no one obeys, no one can give orders.')}</p>
       <br />
-      <p>{TF('{0} {1}', 'Anarchy is order,', ' and the government is civil war.')}</p>
       <LanguageList />
     </Translator>,
     div,

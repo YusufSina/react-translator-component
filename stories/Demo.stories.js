@@ -1,6 +1,6 @@
 /* eslint-disable global-require */
-import React, { Component, useState } from 'react';
-import { Translator, T, TF, LanguageList, Config } from '../src';
+import React, { useState } from 'react';
+import { Translator, T, LanguageList, Config } from '../src';
 import './css/bootstrap.min.css';
 import './css/demo.css';
 
@@ -54,7 +54,6 @@ const App = () => {
       <header className="App-header">
         <div>
           <h6>{T('Doğrular ve yanlışlar yoktur, sadece yorumlar vardır.')}</h6>
-          <h6><small><i>{TF('{0} {1}', 'Friedrich', 'Nietzsche')}</i></small></h6>
         </div>
         <table className="language-lists">
           <thead>

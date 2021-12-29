@@ -1,34 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import Session from 'react-session-api';
+import { context } from '../context';
 
 export const Dropdown = ({ languages, defaultLanguage }) => {
-  const [currentLanguage, setCurrentLanguage] = useState('');
+  const { setCurrentLanguage, currentLanguage } = useContext(context);
   const [toggle, setToggle] = useState(false);
   const [keys, setKeys] = useState([]);
 
   useEffect(() => {
     setCurrentLanguage(defaultLanguage);
 
-    const dropdown = data => {
-      if (!data.language) return;
-
-      if (!languages[data.language]) {
-        setCurrentLanguage(defaultLanguage);
-        return;
-      }
-
-      if (currentLanguage !== data.language) {
-        setCurrentLanguage(data.language);
-      }
-    };
-
-    Session.onSet(dropdown);
     setKeys(Object.keys(languages));
-
-    return () => {
-      Session.unmount('dropdown');
-    };
   }, []);
 
   return (
@@ -48,7 +30,7 @@ export const Dropdown = ({ languages, defaultLanguage }) => {
             className="rtc-btn"
             data-selected={(key === currentLanguage)}
             onClick={() => {
-              Session.set('language', key);
+              setCurrentLanguage(key);
               setToggle(false);
             }}
           >

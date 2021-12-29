@@ -1,49 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import Session from 'react-session-api';
 import ReactHtmlParser from 'react-html-parser';
 import Storage from './storage';
 import Config from './config';
 import SelectList from './list';
 import './index.css';
+import { Consumer, context, Provider } from './context';
 
-let File = {};
-
-const Translator = ({ children }) => {
-  const [, setCurrentLanguage] = useState();
-
-  useEffect(() => {
-    const defaultLanguage = (Object.keys(Config.list).includes(Storage.language()) ? Storage.language() : Config.default);
-
-    Session.set('language', defaultLanguage);
-    Storage.setLanguage(defaultLanguage);
-    setCurrentLanguage(defaultLanguage);
-
-    const translator = data => {
-      const previousLanguage = Storage.language();
-      if (data.language && data.language !== previousLanguage) {
-        // set localStorage
-        Storage.setLanguage(data.language);
-
-        // load file
-        File = Config.list[data.language].file;
-        setCurrentLanguage(data.language);
-      }
-    };
-
-    Session.onSet(translator);
-
-    return () => {
-      Session.unmount('translator');
-    };
-  }, []);
-
-  return (
-    <>
-      {children}
-    </>
-  );
-};
+const Translator = ({ children }) => (
+  <>
+    <Provider>
+      <Consumer>
+        {() => (children)}
+      </Consumer>
+    </Provider>
+  </>
+);
 
 Translator.propTypes = {
   children: PropTypes.node,
@@ -67,36 +39,23 @@ const SetLanguageFile = text => {
 };
 
 const T = text => {
-  console.log(File);
-  return ReactHtmlParser(File[text] || SetLanguageFile(text));
+  const { file } = useContext(context);
+
+  return ReactHtmlParser(file[text] || SetLanguageFile(text));
 };
 
-const TranslateFormat = (text, ...args) => {
-  const traslatedText = T(text)[0];
-
-  const formatText = traslatedText.replace(/{(\d+)}/g, (match, number) => (
-    typeof args[0][number] !== 'undefined'
-      ? args[0][number]
-      : match
-  ));
-
-  return formatText;
-};
-
-const TF = (text, ...args) => (TranslateFormat(text, args));
-
-const LanguageList = ({ Theme, Language, onChange }) => <SelectList Theme={Theme} Language={Language} onChange={onChange} />;
+const LanguageList = ({ Theme, onChange }) => (
+  <SelectList Theme={Theme} onChange={onChange} />
+);
 
 LanguageList.propTypes = {
   Theme: PropTypes.string,
-  Language: PropTypes.string,
   onChange: PropTypes.func,
 };
 
 LanguageList.defaultProps = {
   Theme: 'dropdown',
-  Language: Config.default,
   onChange: () => {},
 };
 
-export { Translator, T, TF, LanguageList, Config };
+export { Translator, T, LanguageList, Config };
