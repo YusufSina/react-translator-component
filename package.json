@@ -1,8 +1,10 @@
 {
   "name": "react-translator-component-2",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "React language translation module for developing a multilingual project 2.",
   "main": "dist/index.js",
+  "licence": "MIT",
+  
   "scripts": {
     "start": "npm run storybook",
     "test": "npm run lint && jest",
@@ -49,7 +51,7 @@
   },
   "homepage": "https://barisates.github.io/react-translator-component/",
   "peerDependencies": {
-    "react": "^16.9.0",
+    "react": "^17.0.2",
     "react-html-parser": "^2.0.2"
   },
   "devDependencies": {
